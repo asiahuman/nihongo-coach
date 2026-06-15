@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>にほんごコーチ｜AHG</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --cream: #f5ede0;
+  --cream-light: #fdf6ee;
+  --cream-dark: #e8d9c5;
+  --navy: #2c3e6b;
+  --navy-light: #3d5199;
+  --gold: #d4a843;
+  --gold-light: #f0c96a;
+  --pink: #e8a0a0;
+  --pink-light: #f5c8c8;
+  --text: #3a2e28;
+  --text-light: #8a7060;
+  --border: #d4bfa8;
+  --white: #fffcf8;
+  --shadow: rgba(60,40,20,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 桜の背景装飾 */
+body::before {
+  content: '🌸 ✿ 🌸 ✿ 🌸 ✿ 🌸 ✿ 🌸 ✿ 🌸 ✿ 🌸 ✿ 🌸';
+  position: fixed;
+  top: 0; left: -20px; right: -20px;
+  font-size: 13px;
+  letter-spacing: 8px;
+  color: rgba(220,150,150,0.25);
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+  padding: 6px 0;
+  background: rgba(245,200,180,0.15);
+}
+
+/* 散りばめた桜 */
+.sakura-bg {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.sakura-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 2px at 8% 20%, rgba(220,150,150,0.3) 50%, transparent 50%),
+    radial-gradient(circle 3px at 15% 65%, rgba(220,150,150,0.2) 50%, transparent 50%),
+    radial-gradient(circle 2px at 25% 40%, rgba(220,150,150,0.25) 50%, transparent 50%),
+    radial-gradient(circle 3px at 82% 15%, rgba(220,150,150,0.3) 50%, transparent 50%),
+    radial-gradient(circle 2px at 90% 55%, rgba(220,150,150,0.2) 50%, transparent 50%),
+    radial-gradient(circle 2px at 70% 80%, rgba(220,150,150,0.25) 50%, transparent 50%),
+    radial-gradient(circle 3px at 45% 90%, rgba(220,150,150,0.2) 50%, transparent 50%),
+    radial-gradient(circle 2px at 60% 30%, rgba(220,150,150,0.15) 50%, transparent 50%),
+    radial-gradient(circle 2px at 35% 75%, rgba(220,150,150,0.2) 50%, transparent 50%),
+    radial-gradient(circle 3px at 5% 85%, rgba(220,150,150,0.25) 50%, transparent 50%);
+}
+
+/* ===== ヘッダー ===== */
+header {
+  background: var(--navy);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+
+.header-inner {
+  max-width: 480px; margin: 0 auto;
+  padding: 11px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.header-logo-box {
+  background: var(--gold);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px; font-weight: 900;
+  color: var(--navy);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.header-divider {
+  width: 1.5px; height: 26px;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+.header-text-group { flex: 1; }
+.header-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px; color: white;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+.header-sub {
+  font-size: 9px; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.15em; margin-top: 2px;
+}
+
+/* ===== メイン ===== */
+main {
+  max-width: 480px; margin: 0 auto;
+  padding: 20px 18px 60px;
+  position: relative; z-index: 1;
+}
+
+/* ===== 手描き風カード ===== */
+.card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 22px 20px;
+  margin-bottom: 14px;
+  position: relative;
+  /* 手描き風の影 */
+  box-shadow:
+    3px 4px 0px rgba(180,140,100,0.25),
+    0 6px 20px var(--shadow);
+  /* 手描き風ボーダー */
+  border: 2px solid var(--border);
+  animation: fadeUp 0.4s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* カード右上の小さな桜装飾 */
+.card::after {
+  content: '✿';
+  position: absolute;
+  top: 10px; right: 14px;
+  font-size: 14px;
+  color: rgba(220,150,150,0.35);
+  pointer-events: none;
+}
+
+.card-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px;
+  color: var(--navy);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+  /* 手描き風アンダーライン */
+  border-bottom: 2.5px solid transparent;
+  background:
+    linear-gradient(var(--white), var(--white)) padding-box,
+    repeating-linear-gradient(
+      90deg,
+      var(--pink) 0px, var(--pink) 6px,
+      transparent 6px, transparent 10px
+    ) border-box;
+}
+
+/* ===== 先生バナー ===== */
+.sensei-banner {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 18px 18px 18px 20px;
+  margin-bottom: 14px;
+  border: 2px solid var(--border);
+  box-shadow: 3px 4px 0px rgba(180,140,100,0.25), 0 6px 20px var(--shadow);
+  display: flex; align-items: flex-start; gap: 14px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+
+/* 左の手描き風ライン */
+.sensei-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 6px; height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--pink) 0px, var(--pink) 8px,
+    var(--pink-light) 8px, var(--pink-light) 14px
+  );
+  border-radius: 20px 0 0 20px;
+}
+
+.sensei-illust {
+  width: 72px; height: 72px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.sensei-body { flex: 1; }
+
+.sensei-speech {
+  background: var(--cream-light);
+  border-radius: 12px 12px 12px 4px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #4a3828;
+  border: 1.5px solid var(--cream-dark);
+  margin-bottom: 8px;
+  position: relative;
+}
+
+/* 吹き出しの小三角 */
+.sensei-speech::before {
+  content: '';
+  position: absolute;
+  bottom: -9px; left: 14px;
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 0px solid transparent;
+  border-top: 9px solid var(--cream-dark);
+}
+.sensei-speech::after {
+  content: '';
+  position: absolute;
+  bottom: -7px; left: 15px;
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 0px solid transparent;
+  border-top: 8px solid var(--cream-light);
+}
+
+.sensei-name {
+  font-size: 11px;
+  color: var(--text-light);
+  padding-left: 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.sensei-name::before {
+  content: '—';
+  color: var(--pink);
+}
+
+/* ===== ステップバー ===== */
+.steps-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  border: 2px solid var(--border);
+  box-shadow: 3px 4px 0px rgba(180,140,100,0.25);
+  display: flex; align-items: center; justify-content: center;
+  gap: 0;
+  animation: fadeUp 0.35s ease;
+}
+
+.step { text-align: center; flex: 1; }
+
+.step-bubble {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border);
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text-light);
+  margin: 0 auto 6px;
+  transition: all 0.3s;
+  box-shadow: 2px 2px 0 rgba(180,140,100,0.2);
+}
+
+.step-bubble.active {
+  background: var(--pink-light);
+  border-color: var(--pink);
+  color: #8a3030;
+  box-shadow: 2px 2px 0 rgba(220,150,150,0.35);
+}
+
+.step-bubble.done {
+  background: var(--gold-light);
+  border-color: var(--gold);
+  color: var(--navy);
+  box-shadow: 2px 2px 0 rgba(212,168,67,0.35);
+}
+
+.step-label {
+  font-size: 10.5px;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.step-arrow {
+  font-size: 18px;
+  color: var(--cream-dark);
+  margin: 0 2px;
+  margin-top: -18px;
+  flex-shrink: 0;
+}
+
+/* ===== フォーム ===== */
+label {
+  font-size: 12px; font-weight: 700;
+  color: var(--navy);
+  display: block; margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+input[type="text"], input[type="password"], select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--cream-light);
+  transition: all 0.2s;
+  margin-bottom: 14px;
+  box-shadow: inset 0 1px 3px rgba(180,140,100,0.1);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--pink);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(220,150,150,0.12), inset 0 1px 3px rgba(180,140,100,0.05);
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ===== アップロードエリア ===== */
+.upload-area {
+  border: 2.5px dashed var(--border);
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-bottom: 14px;
+  background: var(--cream-light);
+}
+
+.upload-area:hover, .upload-area.drag {
+  border-color: var(--pink);
+  background: #fef0f0;
+}
+
+.upload-area input { display: none; }
+
+.upload-icon-wrap {
+  width: 60px; height: 60px;
+  background: var(--white);
+  border-radius: 50%;
+  border: 2px solid var(--cream-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  margin: 0 auto 12px;
+  box-shadow: 2px 2px 0 rgba(180,140,100,0.2);
+}
+
+.upload-text { color: var(--text-light); font-size: 13px; line-height: 1.8; }
+.upload-text strong { color: var(--navy); }
+
+#preview-img {
+  max-width: 100%; max-height: 250px;
+  border-radius: 12px; margin-top: 12px;
+  display: none;
+  border: 2px solid var(--border);
+  box-shadow: 3px 4px 0 rgba(180,140,100,0.2);
+}
+
+/* ===== 送信ボタン ===== */
+.btn-submit {
+  display: block; width: 100%;
+  padding: 16px;
+  background: var(--navy);
+  color: white;
+  border: none; border-radius: 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  box-shadow: 3px 4px 0 rgba(26,40,80,0.35);
+  position: relative;
+  margin-top: 6px;
+}
+
+.btn-submit:hover {
+  background: var(--navy-light);
+  transform: translateY(-1px);
+  box-shadow: 4px 6px 0 rgba(26,40,80,0.3);
+}
+
+.btn-submit:active {
+  transform: translateY(2px);
+  box-shadow: 1px 2px 0 rgba(26,40,80,0.3);
+}
+
+.btn-submit:disabled {
+  background: #b0a898; cursor: not-allowed;
+  transform: none; box-shadow: 2px 3px 0 rgba(100,90,80,0.2);
+}
+
+/* ===== ローディング ===== */
+.loading-box {
+  text-align: center; padding: 44px 20px;
+}
+
+.loading-pencil {
+  font-size: 2.8em;
+  animation: pencilBounce 0.7s ease-in-out infinite alternate;
+  display: block; margin-bottom: 14px;
+}
+
+@keyframes pencilBounce {
+  from { transform: rotate(-8deg) translateY(0); }
+  to { transform: rotate(8deg) translateY(-12px); }
+}
+
+.loading-text {
+  color: var(--navy); font-size: 14px; font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.2s infinite;
+}
+@keyframes dots {
+  0% { content: ''; }
+  33% { content: '・'; }
+  66% { content: '・・'; }
+  100% { content: '・・・'; }
+}
+
+.loading-sub { color: var(--text-light); font-size: 12px; }
+
+/* ===== 結果ボックス ===== */
+.result-box {
+  background: var(--cream-light);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  white-space: pre-wrap;
+  line-height: 2;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 14px;
+  box-shadow: 3px 4px 0 rgba(180,140,100,0.2);
+}
+
+.result-congrats {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #fef0e8, var(--white));
+  border-radius: 16px;
+  border: 2px solid var(--cream-dark);
+  box-shadow: 3px 4px 0 rgba(180,140,100,0.15);
+}
+
+.result-congrats-icon { font-size: 2.5em; margin-bottom: 8px; }
+.result-congrats-text { font-size: 13px; color: var(--text-light); line-height: 1.8; }
+.result-congrats-text strong { color: var(--navy); }
+
+/* ===== 設定（先生用） ===== */
+details { margin-bottom: 14px; }
+
+details summary {
+  cursor: pointer; list-style: none;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 12px; color: var(--text-light);
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 2px 3px 0 rgba(180,140,100,0.2);
+}
+
+details summary:hover { background: var(--cream-light); }
+details[open] summary { border-radius: 12px 12px 0 0; border-bottom: none; box-shadow: none; }
+
+.settings-body {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 16px;
+}
+
+.settings-row { display: flex; gap: 8px; align-items: flex-end; }
+.settings-row > div { flex: 1; }
+.settings-row input { margin-bottom: 0; }
+
+.btn-save {
+  white-space: nowrap; padding: 11px 14px;
+  background: var(--navy); color: white;
+  border: none; border-radius: 10px;
+  cursor: pointer; font-size: 13px;
+  font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+  box-shadow: 2px 2px 0 rgba(26,40,80,0.3);
+  transition: all 0.2s;
+}
+
+.btn-save:hover { background: var(--navy-light); }
+#api-status { font-size: 12px; color: #5a7a3a; margin-top: 8px; }
+
+/* ===== 底部の桜装飾 ===== */
+.footer-sakura {
+  text-align: center;
+  padding: 10px 0 0;
+  font-size: 13px;
+  color: rgba(220,150,150,0.4);
+  letter-spacing: 8px;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 480px) {
+  .form-row { grid-template-columns: 1fr; }
+  main { padding: 16px 14px 50px; }
+  .card { padding: 18px 16px; }
+  .sensei-illust { width: 58px; height: 58px; }
+}
+</style>
+</head>
+<body>
+<div class="sakura-bg"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo-box">AHG</div>
+    <div class="header-divider"></div>
+    <div class="header-text-group">
+      <div class="header-title">にほんごコーチ</div>
+      <div class="header-sub">ASIA HUMAN GATEWAY</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 先生バナー -->
+  <div class="sensei-banner">
+    <div class="sensei-illust"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACQAFoDASIAAhEBAxEB/8QAHAAAAQQDAQAAAAAAAAAAAAAABwAFBggBAwQC/8QAORAAAQMDAwEGAwcDAwUAAAAAAQIDBAAFEQYSITEHExRBUWEicYEIFSMyQlKRFiQzJXLBNJKhsdH/xAAaAQACAwEBAAAAAAAAAAAAAAABAwIEBQAG/8QAIREAAgICAwADAQEAAAAAAAAAAAECEQMEEiExBSJBExX/2gAMAwEAAhEDEQA/ALdUqWMHFKkDRUqWax16GgdTZkDNa33mo7ZdfcS2hIypSjgAVsGPM/OgN28a2LaJcJpw7GvwmkJXgOLPUnHpXWkThB5JUEed2o6FiOLZVfmH1pOFJY+MpPviumw9omjL3ITGt98jmQro0tW1Z+hqotqeajxUsQGGY6nPikvbAVEnyFenY8QLS6w13bqeQ6nhefmKS86TourR6svCnBGQQQfMUqrt2EdqU5OoW9I6gf75p1OIchR5z+1VWKwCARTou0UpwcHTMUqWKWKkQMUs0lcVg0LOo9EYTuUQABkk+VQPV3aPDtji4dqaE2SM7nd2GWyP3Krj7Q9VeInf05AmiOMYlPA8/wCwe5oI9oDc2NLTFLrTUMfkZbPJ91eppM8leFzBrcu2Pepe1i6OvqaTNdeURgpYTtbB9ledCvUBTdZC3n48glSio/3BPNdqk4HwgVrWOM4pDyMvxwRiMtvacYf7ttT7APOFDcD9a7pdwkw2j4iKVHolTfKT8/Stu4B0JKhu8hXU2C4kpUkKSR0NCXbGrwZYzz8C+26ehWZCXku8HpyBV87K6uTZob6j8TjCVH54qjVjtiX9YW9sJzGkvpacKzjuec1eq3NIYgx2GiNiGkpSR8qtY39TK3OpG7NLNZUOeKxipplQRScjNMetrwmxadl3DjelO1oH954H/mn3OVYFDX7QEtETSjTbvKVu5P0GRQl4MxK5pFeLxqN6PdXnlr3OtrK1qJ6unr/FarRd2npjlxvLCpa1/wCNClcCozcCHpq1uEbCsrOT1JrWu4tJXtaCnFDolNU5K2bcaiqJDMksb3JBQG28k4HQD0rlZWXoxeWNiVcpB8h702NvSZj6UvNDYD8LSPiKj70Vuz7svu+oZEWdeAqBbW1hamin4ngPL2Fco2dKaIknRc5emf6tdS4lKHNqG8dWz+qsMMtotyJaMFTaxvT6pqxGqH7BAgKsDy0JS4yUJZSnOBiq4zC3BuUu1h4rCCQCpONyfKuojCaZxazcZStMqEdqVAbtpx8XUGrRdgGrv6u7P4kpS98iL/bv/wC5NVIuqg5AkMBXKKOH2KpBRbb7bCrPduh7Gem6nY3+FbbgqssYk+teq8is08y/TyPzcdaFf2m4zjug0yUg4ZeBVj3oqrx0HWod2tNol6RdguICvFLS3z+nJ5Nc30TxP7op1YtOXLVOoTbo7a1JHxJCVYGB5k+lTa4aE0VaZrMLUmrAxLwB4aGrZg+h9aduza1Gzdq1xs8eYsx1RFJadV+dJ8yajn2g9HO6fbsVy0+25PksyC7IkLTvLjnUZ9qrpJmo3IOXZtpPRMGIiRZYjMpWP+oc+NR+ZogpwAAkAJHQAUHfs2rv8vTku6X5gR3Zb25LQRtCRjyFFxpZScdcUl9M5xtdkO19rLTGkriyiXF8RcJRCUobb3LP/wAqC6ge0b2pd9bLav7s1FAO5KFt7FKPoR5it32kNMSZEdF4sMZx65b0qW4nq2B0xWns00FFkRbLqe4uPRtRMrK33BwXh6KpvRCN/iARqNmVbLlNgzmg08lQQoHzPrR8+xtD/t7/AHNIwhxxLQ+aahPaJDsd07a3mLvGMiOWgEs7tu5fkc0buwCzQLBYp9vtwUGPFqcG7qnPl9KlD0hsTuIUBjypY9qwmvdOXZnI1q6CmPWFrN1srrCCQ6g942R+4c0+AgivOM0GrDF07KbafvCLT25LXc3XGpMl0x1IXwEk/wDFH1dmMlZ75vfuVkAjIpi7T+zaHK7Q4mofAh1ua33DykIyptz9Ln0qSabvL9mcRYtVhLMpsbWJRHwPJ8jn1pUsb/DRx7UUux6YbZhRklxSGkJwMngV6jMNR3X5RkhSHeTuWMD5U4TIkOfELTqG5DChkjOQaZUaWtSFFSjIcQD/AIlOZQPpSXGjnk5u0bHHWbnDUuK6lac7dwHWm1uE606Fg7dp5PtT4RCt8YBIajMIHTOAKiWpLvcLzEeh6aYUtlIJfl7MgJHUJ9Sa6MW2N/uscaArDSdR9vryGIpmqbypCBwAU8bj7VZ3RNjNktimlnL76y47zwFHyFQnsP0U7b7hN1XcYfh5MlPdRm1j422/f3PWiukYP/urSjRnZMrmxIyODWzIrweBmsZo+Cjy86ywwt55xLbaBlSjwAKH1+7Smre4lUeA4+wpWEc/G4M8kDrj3p57SO9+52Egnw6pCA/jzTnz9qaZWkYMlxcthWHXcDvDzsRj8qfSi3QzHj5DpobXNo1eZCIG4ORlbVoWOhp/vFtgXiIuJcYrchlQwQocj5HyoS25qPozW7Dr0iPEZeSr8BPHwfuUfM08X7XdxuDK0WJCY0dQITJdHJ9wK6ycdeU5VFEJ7RPvjRuphb9GzJrUZEfvnY5XuSOffmmdztN1KYrKfEuh1Y+La0TW+c3Oau7t1uM56ah1ra6sjp9PStMS52nvnD37aY5ThA2nKai6Zv6+hUakMeoJGp9SSIniZ8sBJ7z8VeAoDyAFWe0T3bml4K0tNt5aTuCU4GcVXdD4my1eCQt9KElDatuAn3qW6XvmpdPNIYampnRUjhlwYKfXBoKkV93Qk1cAs621RbdJWdVzuKz3YOxCEjJWr0AqJ2ftUYuU/u0WqS3HSgLWtQwQD5geYqHamvr+vb/Gt7NscAto71xtR4Us8Y/g1O7XpCMiBHRJWoONqCmlDhSE/sJ8xU+RkPDJek4gS486K3JiuJdZWMpUDwa27ahuhELY1FeYsM/6W0oBCfJLnmB7VM/5oNCH6cF6hMXG3PQXx+G8gpJ9Peopoia84xJtUpQMm3u9ypQ6KT5H+KkGr55tunJ80cKaaUUn3xQKssrUdmddkWqY1iYQ66l/Ksk88VGbL2rryzXxJR2kxLfe9Wxo0iPzBSHFLH6/RJ9q5HUpUVBK0lKeNg/T7U1xZ9wTqZ1+5updXMZ3KKeEo2ivel1JkxJE8EkSX1KT8qhfRu6eH+fvp1LQM4xWlcdhRyqO0T67a7lIOTxXgooGtaNDTYSfhSB8hXQhoLIPQ1hHB6V6eUpMZ1SMhYQSn54oohN0rOCM6zp3WluuDbxa8e6I77eMhfofnRa1Jck26zOytyUqKdre44yT0oG35+XOjWVmKprxpf7zesZCdtduqFaj1Nbk267TWm2EKCgGMgqI6Uf0w9nWc3yiHPRttFssTSCoLdd/FcX13E809DOKiPZNPenaNi+IOXWh3asnJ44qX4qdM8/kjxk0yJ9qK0p0u5HUR/cOJb59zQucaDbhRxhACR9KI3ayofd8EKOE+JTk/Wh0+QZLoH7jQyG/8N02MOpXS1PbUk8+GWBTtpV2MNNQEtEYDX/NcF7aQHEznVgNstqSQepzTRo119NvVEfZWyWFkJSvrtzxUErRsXHnROAsFWdwrPB8xTQFqxgKNZDjgH5jRoYn6Oi0jr0rS+8hDZBWOhriDjhTys003955m1ynGgVOhshseqj0oVQHVWzktDoXf4IUSfhdKf8AuqWlOSD6VEdKQ5TjdulykBh+O0Uvtnrk81LUnj2NdVshBqUXRNOxJ1Lf3vBUo7kSN6Qf2kUSefahJ2RB462uyx/h8MkHHTdmi0MY6mnRPHbiayuhh1XaE3uzuwshC+FNrP6VDpQYmMXi3TFM3S1yW3AcBTSC4lY9eOlH4p+LrkUggFPTPNBqyeDZnhf1A1pDR9zv85uZdoiodsZXvQ2v8zxHqPIVGrikHV187tKwhEkoA24HFWLwQjBPNNj1itzjynFwmtyzuV8PU0FEsYvkJLJykA5sYTzn+K9jBo1K05aj1ht4+VeE6Ys2c+ER/FBxL/8ArxrwDOweRriu8ZT0JaEZ/MlWcehzR5Om7OnpDb/isosVpSCBCa+oo8UhU/lVOLjQMdU6SnKt0TUOnmO+kKYT4iLnHejHUe9R5Ltwd/AhWia9NPHdKaKQD7qPFH5DKGm0obASEjAA8qyhtIJI4PmQOa6ipj+QyY48URXsx05JsNpdcuBSZ8tXePY6JPpUvB96xSxR7M7JLnK2f//Z" style="width:72px;height:72px;object-fit:cover;object-position:top;border-radius:50%;border:2.5px solid var(--pink);box-shadow:2px 3px 0 rgba(220,150,150,0.3);" alt="コーディネーター"></div>
+    <div class="sensei-body">
+      <div class="sensei-speech">
+        「今日もよく来てくれました！✨<br>
+        書けば書くほど、かならず上手になります。<br>
+        あなたの努力を、一緒に応援します。<br>
+        さあ、今日も挑戦しましょう！💪」
+      </div>
+      <div class="sensei-name">コーディネーターより</div>
+    </div>
+  </div>
+
+  <!-- ステップバー -->
+  <div class="steps-card">
+    <div class="step">
+      <div class="step-bubble active" id="step1">①</div>
+      <div class="step-label">名前と<br>レベル</div>
+    </div>
+    <div class="step-arrow">›</div>
+    <div class="step">
+      <div class="step-bubble" id="step2">②</div>
+      <div class="step-label">写真を<br>送る</div>
+    </div>
+    <div class="step-arrow">›</div>
+    <div class="step">
+      <div class="step-bubble" id="step3">③</div>
+      <div class="step-label">結果を<br>見る</div>
+    </div>
+  </div>
+
+  <!-- ① 受講生情報 -->
+  <div class="card" id="card-info">
+    <div class="card-title">📋 あなたの情報</div>
+    <div class="form-row">
+      <div>
+        <label>お名前</label>
+        <input type="text" id="s-name" placeholder="例：グエン" oninput="updateSteps()" />
+      </div>
+      <div>
+        <label>母語（ぼご）</label>
+        <select id="s-lang">
+          <option value="インドネシア語">インドネシア語</option>
+          <option value="ベトナム語">ベトナム語</option>
+          <option value="ネパール語">ネパール語</option>
+        </select>
+      </div>
+    </div>
+    <label>レベル</label>
+    <select id="s-level" style="margin-bottom:0">
+      <option value="N5">N5（入門）</option>
+      <option value="N4" selected>N4（初級）</option>
+      <option value="N3">N3（中級）</option>
+      <option value="N2">N2（上級）</option>
+    </select>
+  </div>
+
+  <!-- ② 写真 -->
+  <div class="card">
+    <div class="card-title">📷 課題の写真</div>
+    <div class="upload-area" id="upload-area"
+         onclick="document.getElementById('s-image').click()"
+         ondragover="event.preventDefault();this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="handleDrop(event)">
+      <input type="file" id="s-image" accept="image/*" onchange="previewImage(this)">
+      <div class="upload-icon-wrap">📄</div>
+      <div class="upload-text">
+        <strong>ここをタップして写真を選ぶ</strong><br>
+        またはドラッグ＆ドロップ
+      </div>
+    </div>
+    <img id="preview-img" />
+    <button class="btn-submit" id="submit-btn" onclick="submitWork()">
+      添削をお願いする
+    </button>
+  </div>
+
+  <!-- ③ 結果 -->
+  <div class="card" id="result-card" style="display:none">
+    <div class="card-title">🌟 添削結果</div>
+    <div id="result-area"></div>
+  </div>
+
+  <div class="footer-sakura">🌸 ✿ 🌸 ✿ 🌸</div>
+
+</main>
+
+<script>
+let imageBase64 = '';
+let imageMimeType = '';
+
+function updateSteps() {
+  const name = document.getElementById('s-name').value.trim();
+  document.getElementById('step1').className = 'step-bubble ' + (name ? 'done' : 'active');
+  document.getElementById('step2').className = 'step-bubble ' + (name ? 'active' : '');
+}
+
+function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  readFile(file);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) readFile(file);
+}
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const data = ev.target.result;
+    imageMimeType = file.type || 'image/jpeg';
+    imageBase64 = data.split(',')[1];
+    const img = document.getElementById('preview-img');
+    img.src = data; img.style.display = 'block';
+    document.getElementById('step2').className = 'step-bubble done';
+    document.getElementById('step3').className = 'step-bubble active';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitWork() {
+  const name = document.getElementById('s-name').value.trim();
+  const lang = document.getElementById('s-lang').value.trim();
+  const level = document.getElementById('s-level').value;
+
+  if (!name) { alert('お名前を入力してください'); return; }
+  if (!lang) { alert('母語を入力してください'); return; }
+  if (!imageBase64) { alert('写真を選んでください'); return; }
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = '送信中...';
+
+  const resultCard = document.getElementById('result-card');
+  const resultArea = document.getElementById('result-area');
+  resultCard.style.display = 'block';
+  setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+  resultArea.innerHTML = `
+    <div class="loading-box">
+      <span class="loading-pencil">✏️</span>
+      <div class="loading-text">添削しています<span class="loading-dots"></span></div>
+      <div class="loading-sub" style="margin-top:6px">10〜20秒ほどお待ちください</div>
+    </div>`;
+
+  try {
+    const aiResult = await callGAS(name, lang, level, imageBase64, imageMimeType);
+    document.getElementById('step3').className = 'step-bubble done';
+
+    resultArea.innerHTML = `
+      <div class="result-box">${escHtml(aiResult)}</div>
+      <div class="result-congrats">
+        <div class="result-congrats-icon">🎉🌸</div>
+        <div class="result-congrats-text">
+          <strong>${escHtml(name)}さん、お疲れさまでした！</strong><br>
+          また次回も一緒に練習しましょう。<br>あなたの努力を応援しています 🌟
+        </div>
+      </div>`;
+
+  } catch(err) {
+    resultArea.innerHTML = `<div style="color:#c0392b;padding:20px;text-align:center;font-size:13px">❌ エラー：${escHtml(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '添削をお願いする';
+  }
+}
+
+async function callGAS(name, lang, level, b64, mime) {
+  const res = await fetch('https://script.google.com/macros/s/AKfycbwmP0Z4MdY5FBcXTH87MeQro3LyqBt9pz5Adn6cgRmVAXvuPP_xhD54otUN0gqQSoKn7A/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: 'tensaku',
+      name: name,
+      lang: lang,
+      level: level,
+      image: b64,
+      mime: mime
+    })
+  });
+
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.result;
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
